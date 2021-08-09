@@ -1,14 +1,15 @@
 import { Paddle, PaddleDirection, PaddleLimits } from "./paddle"
+import { Position } from "./position"
 
 describe('Paddle', () => {
   test('should paddle init stopped', () => {
-    const paddle = new Paddle(10, 20)
+    const paddle = new Paddle(new Position(10, 20))
 
     expect(paddle.direction).toBe(PaddleDirection.Stop)
   })
 
   test('should paddle direction is Up when paddle going up', () => {
-    const paddle = new Paddle(10, 20)
+    const paddle = new Paddle(new Position(10, 20))
 
     paddle.up()
 
@@ -16,7 +17,7 @@ describe('Paddle', () => {
   })
 
   test('should paddle direction is Down when paddle going down', () => {
-    const paddle = new Paddle(10, 20)
+    const paddle = new Paddle(new Position(10, 20))
 
     paddle.down()
 
@@ -24,7 +25,7 @@ describe('Paddle', () => {
   })
 
   test('should paddle direction is Stop when paddle to stop', () => {
-    const paddle = new Paddle(10, 20)
+    const paddle = new Paddle(new Position(10, 20))
 
     paddle.stop()
 
@@ -32,7 +33,7 @@ describe('Paddle', () => {
   })
 
   test('should decrement y when update paddle that is going up', () => {
-    const paddle = new Paddle(10, 20)
+    const paddle = new Paddle(new Position(10, 20))
 
     paddle.up()
     paddle.update()
@@ -41,7 +42,7 @@ describe('Paddle', () => {
   })
 
   test('should increment y when paddle down', () => {
-    const paddle = new Paddle(10, 20)
+    const paddle = new Paddle(new Position(10, 20))
 
     paddle.down()
     paddle.update()
@@ -51,7 +52,7 @@ describe('Paddle', () => {
 
   test('should not decrement y when update paddle that is going up and reached the top limit', () => {
     const limits = new PaddleLimits(30, 0)
-    const paddle = new Paddle(10, 0, limits)
+    const paddle = new Paddle(new Position(10, 0), limits)
 
     paddle.up()
     paddle.update()
@@ -61,7 +62,7 @@ describe('Paddle', () => {
 
   test('should not increment y when paddle down and reached the bottom limit', () => {
     const limits = new PaddleLimits(100, 0)
-    const paddle = new Paddle(10, 20, limits)
+    const paddle = new Paddle(new Position(10, 20), limits)
 
     paddle.down()
     paddle.update()

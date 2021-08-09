@@ -1,3 +1,5 @@
+import { Position } from "./position";
+
 export enum PaddleDirection {
   Up,
   Down,
@@ -18,17 +20,16 @@ export class Paddle {
   private _direction = PaddleDirection.Stop
 
   constructor(
-    private _x: number,
-    private _y: number,
+    private position: Position,
     private limits: PaddleLimits = new PaddleLimits()
   ) {}
 
   get x(): number {
-    return this._x;
+    return this.position.x;
   }
 
   get y(): number {
-    return this._y;
+    return this.position.y;
   }
 
   get direction(): PaddleDirection {
@@ -53,9 +54,9 @@ export class Paddle {
 
   update() {
     if (this.isGoingUp && this.canUp) {
-      this._y -= 2
+      this.position = new Position(this.position.x, this.position.y - 2)
     } else if (this.isGoingDown && this.canDown) {
-      this._y += 2
+      this.position = new Position(this.position.x, this.position.y + 2)
     }
   }
 
