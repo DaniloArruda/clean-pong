@@ -12,13 +12,17 @@ export class BallLimits {
 
 export class Ball {
   public readonly radius = 10
-  public position: Position
 
+  private position: Position
   private speed: Speed
 
   constructor(
-    private ballLimits: BallLimits,
+    private readonly ballLimits: BallLimits,
   ) {
+    this.init()
+  }
+
+  private init() {
     this.position = new Position(this.ballLimits.right / 2, this.ballLimits.bottom / 2)
     this.speed = this.defineSpeed()
   }
@@ -38,6 +42,8 @@ export class Ball {
   public update() {
     if (this.hitTop || this.hitBottom) {
       this.speed = new Speed(this.speed.x, -this.speed.y)
+    } else if (this.hitLeft || this.hitRight) {
+      this.init()
     }
 
     this.position = this.position.moveWith(this.speed)
@@ -49,6 +55,14 @@ export class Ball {
 
   private get hitBottom(): boolean {
     return this.y > this.ballLimits.bottom - this.radius
+  }
+
+  private get hitLeft(): boolean {
+    return this.x < this.radius
+  }
+
+  private get hitRight(): boolean {
+    return this.x > this.ballLimits.right - this.radius
   }
 
   private defineSpeed(): Speed {
