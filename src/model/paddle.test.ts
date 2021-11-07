@@ -1,3 +1,4 @@
+import { Ball, BallLimits } from "./ball"
 import { Paddle, PaddleDirection, PaddleLimits } from "./paddle"
 import { Position } from "./position"
 
@@ -68,5 +69,10 @@ describe('Paddle', () => {
     paddle.update()
 
     expect(paddle.y).toBe(20)
+  })
+
+  test('paddle was touched by ball', () => {
+    const paddle = new Paddle(new Position(10, 10), new PaddleLimits(50))
+    const ball = new Ball(new BallLimits(50, 50))
   })
 })
