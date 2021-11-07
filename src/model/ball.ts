@@ -7,7 +7,7 @@ export class BallLimits {
     public readonly right: number,
     public readonly top: number = 0,
     public readonly left: number = 0,
-  ) {}
+  ) { }
 }
 
 export class Ball {
@@ -41,12 +41,24 @@ export class Ball {
 
   public update() {
     if (this.hitTop || this.hitBottom) {
-      this.speed = new Speed(this.speed.x, -this.speed.y)
+      this.speed = this.speed.changeVerticalDirection();
     } else if (this.hitLeft || this.hitRight) {
       this.init()
     }
 
-    this.position = this.position.moveWith(this.speed)
+    this.moveWith(this.speed)
+  }
+
+  public moveWith(speed: Speed): void {
+    this.position = new Position(this.x + speed.x, this.y + speed.y)
+  }
+
+  public get goingUp(): boolean {
+    return this.speed.y < 0
+  }
+
+  public get goingDown(): boolean {
+    return this.speed.y > 0
   }
 
   private get hitTop(): boolean {
