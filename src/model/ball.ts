@@ -1,3 +1,4 @@
+import { Paddle } from "./paddle"
 import { Position } from "./position"
 import { Speed } from "./speed"
 
@@ -28,13 +29,27 @@ export class Ball {
     this.position = new Position(this.ballLimits.right / 2, this.ballLimits.bottom / 2)
   }
 
-  public defineSpeed(): void {
+  public defineSpeedRandomly(): void {
     const xSpeed = (() => {
       const value = this.randomBetween(3, 4)
       const isRight = this.randomBetween(0, 1) > 0.5
       return isRight ? value : -value
     })()
 
+    const ySpeed = this.randomBetween(-3, 3)
+
+    this.speed = new Speed(xSpeed, ySpeed)
+  }
+
+  public defineSpeedToRight(): void {
+    const xSpeed = this.randomBetween(3, 4)
+    const ySpeed = this.randomBetween(-3, 3)
+
+    this.speed = new Speed(xSpeed, ySpeed)
+  }
+
+  public defineSpeedToLeft(): void {
+    const xSpeed = this.randomBetween(-3, -4)
     const ySpeed = this.randomBetween(-3, 3)
 
     this.speed = new Speed(xSpeed, ySpeed)
@@ -60,20 +75,28 @@ export class Ball {
     return this.x - this.radius
   }
 
-  public get goingUp(): boolean {
+  public get isGoingUp(): boolean {
     return this.speed.y < 0
   }
 
-  public get goingDown(): boolean {
+  public get isGoingDown(): boolean {
     return this.speed.y > 0
+  }
+
+  public get isGoingLeft(): boolean {
+    return this.speed.x < 0
+  }
+
+  public get isGoingRight(): boolean {
+    return this.speed.x > 0
   }
 
   public update() {
     if (this.hitTop || this.hitBottom) {
-      this.speed = this.speed.changeVerticalDirection();
+      this.speed = this.speed.revertVerticalDirection();
     } else if (this.hitLeft || this.hitRight) {
       this.defineMiddlePosition()
-      this.defineSpeed()
+      this.defineSpeedRandomly()
     }
 
     this.moveWith(this.speed)
@@ -81,6 +104,15 @@ export class Ball {
 
   public moveWith(speed: Speed): void {
     this.position = new Position(this.x + speed.x, this.y + speed.y)
+  }
+
+  public revertHorizontalDirection(): void {
+    this.speed = this.speed.revertHorizontalDirection()
+  }
+
+  public hitPaddle(paddle: Paddle): boolean { // TODO: consider y coordinate on calculation
+    return this.rightCorner >= paddle.leftCorner && this.rightCorner <= paddle.middleX
+      || this.leftCorner <= paddle.rightCorner && this.leftCorner > paddle.middleX
   }
 
   private get hitTop(): boolean {
@@ -130,8 +162,18 @@ export class BallBuilder {
     return this
   }
 
-  startMoving(): BallBuilder {
-    this.instance.defineSpeed()
+  startMovingRandomly(): BallBuilder {
+    this.instance.defineSpeedRandomly()
+    return this
+  }
+
+  startMovingToLeft(): BallBuilder {
+    this.instance.defineSpeedToLeft()
+    return this
+  }
+
+  startMovingToRight(): BallBuilder {
+    this.instance.defineSpeedToRight()
     return this
   }
 

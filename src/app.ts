@@ -17,7 +17,7 @@ const sketch = (p5: P5) => {
 
     paddleLeft = new Paddle(new Position(26, p5.height / 2), paddleLimits)
     paddleRight = new Paddle(new Position(p5.width - 48, p5.height / 2), paddleLimits)
-    ball = BallBuilder.withLimits(p5.height, p5.width).onMiddlePosition().startMoving().build()
+    ball = BallBuilder.withLimits(p5.height, p5.width).onMiddlePosition().startMovingRandomly().build()
   };
 
   p5.draw = () => {
@@ -55,7 +55,22 @@ const sketch = (p5: P5) => {
   }
 
   function handleColision(paddleLeft: Paddle, paddleRight: Paddle, ball: Ball) {
+    if (ball.hitPaddle(paddleLeft) || ball.hitPaddle(paddleRight)) {
+      ball.revertHorizontalDirection()
+    }
   }
 };
 
 new P5(sketch);
+
+
+// it('should revert horizontal direction when ball hit a paddle', () => {
+//   const paddle = new Paddle(new Position(0, 20), new PaddleLimits(100))
+//   const ball = BallBuilder.withLimits(100, 100).onPosition(30, 30).startMovingToLeft().build()
+
+//   expect(ball.isGoingLeft).toBe(true)
+
+//   ball.update()
+
+//   expect(ball.isGoingRight).toBe(true)
+// })

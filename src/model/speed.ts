@@ -4,7 +4,11 @@ export class Speed {
     public readonly y: number,
   ) { }
 
-  changeVerticalDirection(): Speed {
+  revertVerticalDirection(): Speed {
     return new Speed(this.x, -this.y);
+  }
+
+  revertHorizontalDirection(): Speed {
+    return new Speed(-this.x, this.y);
   }
 }

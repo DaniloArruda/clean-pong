@@ -76,4 +76,15 @@ export class Paddle {
     return !this.limits.bottom || this.y < this.limits.bottom - this.height
   }
 
+  get rightCorner(): number {
+    return this.x + this.width
+  }
+
+  get leftCorner(): number {
+    return this.x
+  }
+
+  get middleX(): number {
+    return this.leftCorner + ((this.rightCorner - this.leftCorner) / 2)
+  }
 }

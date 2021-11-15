@@ -1,4 +1,6 @@
-import { Ball, BallBuilder } from "./ball"
+import { BallBuilder } from "./ball"
+import { Paddle, PaddleLimits } from "./paddle"
+import { Position } from "./position"
 import { Speed } from "./speed"
 
 describe('Ball', () => {
@@ -21,20 +23,27 @@ describe('Ball', () => {
   })
 
   it('should change direction when ball hit vertical limits', () => {
-    const ball = BallBuilder.withLimits(30, 30).startMoving().onMiddlePosition().build()
+    const ball = BallBuilder.withLimits(30, 30).startMovingRandomly().onMiddlePosition().build()
 
-    if (ball.goingDown) {
+    if (ball.isGoingDown) {
       ball.moveWith(new Speed(0, 14))
 
       ball.update()
 
-      expect(ball.goingUp).toBe(true)
+      expect(ball.isGoingUp).toBe(true)
     } else {
       ball.moveWith(new Speed(0, -14))
 
       ball.update()
 
-      expect(ball.goingDown).toBe(true)
+      expect(ball.isGoingDown).toBe(true)
     }
+  })
+
+  it('should ball hit a paddle', () => {
+    const paddle = new Paddle(new Position(0, 20), new PaddleLimits(100))
+    const ball = BallBuilder.withLimits(100, 100).onPosition(30, 30).startMovingToLeft().build()
+
+    expect(ball.hitPaddle(paddle)).toBe(true)
   })
 })
