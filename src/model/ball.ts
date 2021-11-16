@@ -67,6 +67,14 @@ export class Ball {
     return this.radius * 2
   }
 
+  public get bottomCorner(): number {
+    return this.y + this.radius
+  }
+
+  public get topCorner(): number {
+    return this.y - this.radius
+  }
+
   public get rightCorner(): number {
     return this.x + this.radius
   }
@@ -110,9 +118,12 @@ export class Ball {
     this.speed = this.speed.revertHorizontalDirection()
   }
 
-  public hitPaddle(paddle: Paddle): boolean { // TODO: consider y coordinate on calculation
-    return this.rightCorner >= paddle.leftCorner && this.rightCorner <= paddle.middleX
-      || this.leftCorner <= paddle.rightCorner && this.leftCorner > paddle.middleX
+  public hitPaddle(paddle: Paddle): boolean {
+    return this.bottomCorner >= paddle.topCorner && this.topCorner <= paddle.bottomCorner
+      && (
+        this.isGoingRight && this.rightCorner >= paddle.leftCorner && this.rightCorner <= paddle.middleX
+        || this.isGoingLeft && this.leftCorner <= paddle.rightCorner && this.leftCorner > paddle.middleX
+      )
   }
 
   private get hitTop(): boolean {

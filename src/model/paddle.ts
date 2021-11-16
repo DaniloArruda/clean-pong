@@ -10,7 +10,7 @@ export class PaddleLimits {
   constructor(
     public bottom?: number,
     public top = 0,
-  ) {}
+  ) { }
 }
 
 export class Paddle {
@@ -22,7 +22,7 @@ export class Paddle {
   constructor(
     private position: Position,
     private limits: PaddleLimits = new PaddleLimits()
-  ) {}
+  ) { }
 
   get x(): number {
     return this.position.x;
@@ -74,6 +74,14 @@ export class Paddle {
 
   get canDown(): boolean {
     return !this.limits.bottom || this.y < this.limits.bottom - this.height
+  }
+
+  get bottomCorner(): number {
+    return this.y + this.height
+  }
+
+  get topCorner(): number {
+    return this.y
   }
 
   get rightCorner(): number {
